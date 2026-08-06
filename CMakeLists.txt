@@ -1,0 +1,35 @@
+cmake_minimum_required(VERSION 3.20)
+
+project(
+    ASCIIPlayer
+    VERSION 0.1.0
+    DESCRIPTION "ASCII Player"
+    LANGUAGES C
+)
+set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+add_executable(
+    asciiplayer
+    src/main.c
+    src/audio.c
+    src/decoder.c
+    src/fetcher.c
+    src/player.c
+    src/renderer.c
+    src/terminal.c
+)
+target_include_directories(asciiplayer
+    PRIVATE
+        ${PROJECT_SOURCE_DIR}/include
+)
+target_compile_options(asciiplayer
+    PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
+)
+set_target_properties(asciiplayer PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build
+)
