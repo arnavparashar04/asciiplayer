@@ -19,6 +19,7 @@ add_executable(
     src/player.c
     src/renderer.c
     src/terminal.c
+    src/cli.c
 )
 target_include_directories(asciiplayer
     PRIVATE
