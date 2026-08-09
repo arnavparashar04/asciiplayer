@@ -17,5 +17,7 @@ typedef struct cliArgs{
     bool askVersion;
 } cliArgs;
 
-cliArgs init_cli_args(void);
+cliArgs init_cliargs(void);
+cliArgs parseArgs(int argn, char **args);
+
 #endif
