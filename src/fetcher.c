@@ -1,8 +1,6 @@
 #include <libavformat/avformat.h>
 #include <fetcher.h>
-#include<string.h>
-
-int fetcherInit(Fetcher *fetcher, char *path){
+int fetcherInit(Fetcher *fetcher, const char *path){
     fetcher->frmtcontext = NULL;
     fetcher->vStreamIndex = -1;
     fetcher->aStreamIndex = -1;
