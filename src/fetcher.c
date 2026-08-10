@@ -34,5 +34,15 @@ int fetcherInit(Fetcher *fetcher, char *path){
         return -4;
     }
 
+    return 0;
+}
 
+int fetcherNextPacket(Fetcher *fetcher, AVPacket *packet){ //like before the packet pointer is the one modified here, function returns a status code for pass or fail
+    return av_read_frame(fetcher->frmtcontext, packet);
+}
+
+
+void fetcherDestroy(Fetcher *fetcher)
+{
+    avformat_close_input(&fetcher->frmtcontext); //free mem kinda
 }
