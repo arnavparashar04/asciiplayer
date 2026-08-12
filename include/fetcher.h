@@ -9,8 +9,8 @@ typedef struct{
     int aStreamIndex;
 } Fetcher;
 
-int fetcherInit(Fetcher *fetcher, char *path);
-int fetcherNextPacket();
-int fetcherDefer();
+int fetcherInit(Fetcher *fetcher, const char *path);
+int fetcherNextPacket(Fetcher *fetcher, AVPacket *packet);
+int fetcherDefer(Fetcher *fetcher);
 
 #endif
