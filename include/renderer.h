@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include <libavutil/frame.h>
+#include <libswscale/swscale.h>
 
 typedef struct {
     //src res 
