@@ -18,4 +18,8 @@ typedef struct{
 
 }Player;
 
+int playerinit();
+int playerPlay();
+void playerDestroy();
+
 #endif

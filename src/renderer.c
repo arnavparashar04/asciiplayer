@@ -5,6 +5,21 @@
 #include <stdlib.h>
 #include <string.h>
 
-int rendererinit(){
+int rendererinit(Renderer *renderer){
+}
 
+int rendererComp(Renderer *renderer){
+
+}
+
+int normalize(Renderer *renderer, AVFrame *frame){
+
+}
+
+int render(Renderer *renderer, AVFrame *frame){
+
+}
+
+void rDestroy(Renderer *renderer){
+    
 }
