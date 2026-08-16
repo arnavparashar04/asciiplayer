@@ -18,8 +18,8 @@ typedef struct{
 
 }Player;
 
-int playerinit();
-int playerPlay();
-void playerDestroy();
+int playerinit(Player *player, const char *path);
+int playerPlay(Player *player);
+void playerDestroy(Player *player);
 
 #endif
