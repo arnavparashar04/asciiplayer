@@ -1,4 +1,5 @@
 #include "renderer.h"
+#include <libavutil/frame.h>
 #include <libavutil/imgutils.h>
 #include <libavutil/pixfmt.h>
 #include <libswscale/swscale.h>
@@ -33,5 +34,7 @@ int render(Renderer *renderer, AVFrame *frame){
 }
 
 void rDestroy(Renderer *renderer){
-    
+    av_frame_free(&renderer->normframe);
+    sws_freeContext(renderer->swscontxt);
+    free(renderer->output);
 }
