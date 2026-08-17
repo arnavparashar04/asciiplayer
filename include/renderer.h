@@ -13,16 +13,14 @@ typedef struct {
     int targetHeight;
 
     int charCellWidth;
-    int CharCellHeight;
+    int charCellHeight;
 
     const char *charMap;
     int charMapLen;
-    struct SwsContext *swscont;
-    AVFrame *frame;
     char *output;
 } Renderer;
 
-int rendererinit(Renderer *renderer);
+int rendererinit(Renderer *renderer, int frameWidth, int frameHeight);
 int rendererComp(Renderer *renderer);
 int normalize(Renderer *renderer, AVFrame *frame);
 int render(Renderer *renderer, AVFrame *frame);

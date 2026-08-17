@@ -12,6 +12,7 @@
 
 int playerinit(Player *player, const char *path){
     int retrned = fetcherInit(&player->fetcher,path);
+    AVStream *stream = player->fetcher.frmtcontext->streams[player->fetcher.vStreamIndex];
     if(retrned != 0){
         return -50; //todo : here in error enum map to critical fetcher failure
     }
@@ -20,7 +21,7 @@ int playerinit(Player *player, const char *path){
         return -51; //todo :here in error enum map to critical decoder failure
     }
    
-    retrned = rendererinit(&player->renderer);
+    retrned = rendererinit(&player->renderer, stream->codecpar->width, stream->codecpar->height);
     if(retrned !=0){
         return -52; //todo: in error enum map to critical renderer failure
     }
@@ -41,7 +42,7 @@ int playerPlay(Player *player){
        if(packet->stream_index != player->fetcher.vStreamIndex){
            av_packet_unref(packet);
        }
-       int rtrned = avcodec_send_packet(player->decoder.codecContext, packet); //here is where it is actually sent to the decoder with codec context so decoder will know how it should decode                                                   
+       int rtrned = avcodec_send_packet(player->decoder.codecContext, packet);                                                   
        av_packet_unref(packet);
        if(rtrned <0){
            return -100; //todo: map in error enum to criticl decoder failure
@@ -66,7 +67,6 @@ int playerPlay(Player *player){
 
    av_packet_free(&packet);
    av_frame_free(&frame);
-
    return 0;
 }
 

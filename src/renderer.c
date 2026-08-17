@@ -5,7 +5,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-int rendererinit(Renderer *renderer){
+int rendererinit(Renderer *renderer, int frameWidth, int frameHeight){
+   renderer->frameWidth = frameWidth;
+   renderer->frameHeight = frameHeight;
+   renderer->targetWidth = frameHeight;
+   renderer->targetHeight = frameHeight; //upto v1 frame res = target res
+   renderer->charCellWidth = 5;
+   renderer->charCellHeight = 10;
+
+   renderer->charMap = ".`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
+   renderer->charMapLen = strlen(renderer->charMap);
+   renderer->output = "";
 }
 
 int rendererComp(Renderer *renderer){

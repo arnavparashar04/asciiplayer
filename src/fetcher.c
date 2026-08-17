@@ -5,12 +5,12 @@ int fetcherInit(Fetcher *fetcher, const char *path){
     fetcher->vStreamIndex = -1;
     fetcher->aStreamIndex = -1;
 
-    int cont = avformat_open_input(&fetcher->frmtcontext, path, NULL, NULL);//status code var, if fails then wrong path/unsupported format
+    int cont = avformat_open_input(&fetcher->frmtcontext, path, NULL, NULL);
     if(cont <0){
         return -2;
     }
 
-    cont = avformat_find_stream_info(fetcher->frmtcontext, NULL); //now frmtcontext pointer getss filled with context data on the file liek stream codec etc
+    cont = avformat_find_stream_info(fetcher->frmtcontext, NULL); 
     if(cont <0){
         return -3;
     }
@@ -35,12 +35,12 @@ int fetcherInit(Fetcher *fetcher, const char *path){
     return 0;
 }
 
-int fetcherNextPacket(Fetcher *fetcher, AVPacket *packet){ //like before the packet pointer is the one modified here, function returns a status code for pass or fail
+int fetcherNextPacket(Fetcher *fetcher, AVPacket *packet){ 
     return av_read_frame(fetcher->frmtcontext, packet);
 }
 
 
 void fetcherDestroy(Fetcher *fetcher)
 {
-    avformat_close_input(&fetcher->frmtcontext); //free mem kinda
-}
+    avformat_close_input(&fetcher->frmtcontext);
+}    

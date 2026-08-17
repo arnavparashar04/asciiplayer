@@ -10,7 +10,7 @@ int decoderInit(Decoder *decoder, Fetcher *fetcher){
     AVCodecParameters *codecpar = stream->codecpar;
     decoder->codec = avcodec_find_decoder(codecpar->codec_id);
     if (decoder->codec == NULL) {
-        return -5; //btw this type of error handling will be changed in future, ik it is shit rn but there are more imporant things that need to be impleemnted rather than a proper error handling suite rn
+        return -5;
     }
 
     decoder->codecContext = avcodec_alloc_context3(decoder->codec);
