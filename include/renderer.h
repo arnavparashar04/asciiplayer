@@ -18,6 +18,8 @@ typedef struct {
     const char *charMap;
     int charMapLen;
     char *output;
+    struct SwsContext *swscontxt;
+    AVFrame *normframe;
 } Renderer;
 
 int rendererinit(Renderer *renderer, int frameWidth, int frameHeight);

@@ -15,7 +15,9 @@ int rendererinit(Renderer *renderer, int frameWidth, int frameHeight){
 
    renderer->charMap = ".`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
    renderer->charMapLen = strlen(renderer->charMap);
-   renderer->output = "";
+   renderer->swscontxt = NULL;
+   renderer->normframe = NULL;
+   renderer->output = NULL;
 }
 
 int rendererComp(Renderer *renderer){
