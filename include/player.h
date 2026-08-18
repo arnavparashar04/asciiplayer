@@ -15,7 +15,7 @@ typedef struct{
     Renderer renderer;
     Terminal terminal;
     Audio audio;
-
+    char *output;
 }Player;
 
 int playerinit(Player *player, const char *path);

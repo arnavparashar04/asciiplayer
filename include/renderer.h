@@ -24,7 +24,7 @@ typedef struct {
 
 int rendererinit(Renderer *renderer, int frameWidth, int frameHeight);
 int normalize(Renderer *renderer, AVFrame *frame);
-int render(Renderer *renderer, AVFrame *frame);
+char *render(Renderer *renderer, AVFrame *frame);
 void rDestroy(Renderer *renderer);
 
 #endif

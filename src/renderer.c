@@ -21,6 +21,8 @@ int rendererinit(Renderer *renderer, int frameWidth, int frameHeight){
    renderer->swscontxt = NULL;
    renderer->normframe = NULL;
    renderer->output = NULL;
+
+   return 0;
 }
 int normalize(Renderer *renderer, AVFrame *frame){
     if(renderer->swscontxt == NULL){
@@ -43,7 +45,7 @@ int normalize(Renderer *renderer, AVFrame *frame){
     return 0;
 }
 
-int render(Renderer *renderer, AVFrame *frame){
+char *render(Renderer *renderer, AVFrame *frame){
 
 }
 

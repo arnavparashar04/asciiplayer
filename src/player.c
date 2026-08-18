@@ -25,7 +25,7 @@ int playerinit(Player *player, const char *path){
     if(retrned !=0){
         return -52; //todo: in error enum map to critical renderer failure
     }
-    
+    player->output = NULL;
     return 0;
 }
 
@@ -61,7 +61,7 @@ int playerPlay(Player *player){
                return -101; // todo: map to critcial player failure
            }
 
-           render(&player->renderer,frame);
+           player->output = render(&player->renderer,frame);
        }
    }
 
