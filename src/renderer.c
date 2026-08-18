@@ -22,11 +22,6 @@ int rendererinit(Renderer *renderer, int frameWidth, int frameHeight){
    renderer->normframe = NULL;
    renderer->output = NULL;
 }
-
-int rendererComp(Renderer *renderer){
-
-}
-
 int normalize(Renderer *renderer, AVFrame *frame){
     if(renderer->swscontxt == NULL){
         renderer->swscontxt = sws_getContext(renderer->frameWidth, renderer->frameHeight, frame->format, renderer->frameWidth, renderer->frameHeight, AV_PIX_FMT_GRAY8, SWS_BILINEAR, NULL, NULL, NULL);
