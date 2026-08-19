@@ -19,9 +19,10 @@ cliArgs init_cliargs() {
 
 cliArgs parseArgs(int argn, char **args) {
     cliArgs argS = init_cliargs();
-
-    strcpy(argS.path, args[1]);
-    for (int i = 2; i < argn; i++) {
+    if(argn>1){
+        strcpy(argS.path, args[1]);
+    }
+    for (int i = 1; i < argn; i++) {
         if (strcmp("--help", args[i]) == 0 || strcmp("-h", args[i]) == 0) {
             argS.askHelp = true;
         }

@@ -6,10 +6,12 @@ project(
     DESCRIPTION "ASCII Player"
     LANGUAGES C
 )
+
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 add_executable(
     asciiplayer
     src/main.c
@@ -21,16 +23,33 @@ add_executable(
     src/terminal.c
     src/cli.c
 )
+
 target_include_directories(asciiplayer
     PRIVATE
         ${PROJECT_SOURCE_DIR}/include
 )
+
+find_package(PkgConfig REQUIRED)
+
+pkg_check_modules(FFMPEG REQUIRED
+    libavformat
+    libavcodec
+    libavutil
+    libswscale
+)
+
+target_link_libraries(asciiplayer
+    PRIVATE
+        ${FFMPEG_LIBRARIES}
+)
+
 target_compile_options(asciiplayer
     PRIVATE
         -Wall
         -Wextra
         -Wpedantic
 )
+
 set_target_properties(asciiplayer PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build
 )
