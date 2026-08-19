@@ -16,6 +16,7 @@ typedef struct{
     Terminal terminal;
     Audio audio;
     char *output;
+    long long frameTime;
 }Player;
 
 int playerinit(Player *player, const char *path);

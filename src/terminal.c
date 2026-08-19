@@ -16,6 +16,7 @@ void terminalRender(const char *output){
 
 void terminaldestroy(Terminal *terminal){
     terminal->initialized = 0;
-    printf("\033[?25h"); 
+    printf("\033[?25h");
+    printf("\033[2J");
     fflush(stdout);
 }

@@ -29,6 +29,11 @@ target_include_directories(asciiplayer
         ${PROJECT_SOURCE_DIR}/include
 )
 
+target_compile_definitions(asciiplayer
+    PRIVATE
+        _POSIX_C_SOURCE=200809L
+)
+
 find_package(PkgConfig REQUIRED)
 
 pkg_check_modules(FFMPEG REQUIRED
@@ -50,6 +55,6 @@ target_compile_options(asciiplayer
         -Wpedantic
 )
 
-set_target_properties(asciiplayer PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build
+install(TARGETS asciiplayer
+    RUNTIME DESTINATION bin
 )
