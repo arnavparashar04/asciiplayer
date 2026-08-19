@@ -11,6 +11,6 @@ typedef struct{
 
 int fetcherInit(Fetcher *fetcher, const char *path);
 int fetcherNextPacket(Fetcher *fetcher, AVPacket *packet);
-int fetcherDefer(Fetcher *fetcher);
+void fetcherDestroy(Fetcher *fetcher);
 
 #endif

@@ -26,6 +26,7 @@ int playerinit(Player *player, const char *path){
         return -52; //todo: in error enum map to critical renderer failure
     }
     player->output = NULL;
+    terminalinit(&player->terminal);
     return 0;
 }
 
@@ -41,6 +42,7 @@ int playerPlay(Player *player){
    while(fetcherNextPacket(&player->fetcher, packet) >= 0){
        if(packet->stream_index != player->fetcher.vStreamIndex){
            av_packet_unref(packet);
+           continue;
        }
        int rtrned = avcodec_send_packet(player->decoder.codecContext, packet);                                                   
        av_packet_unref(packet);
@@ -62,15 +64,24 @@ int playerPlay(Player *player){
            }
 
            player->output = render(&player->renderer,frame);
+           if(player->output == NULL){
+               return -200; //critical renderer failure
+           }
+           terminalRender(player->output);
        }
    }
-
+    
    av_packet_free(&packet);
    av_frame_free(&frame);
+   playerDestroy(player);
    return 0;
 }
 
-
-
+void playerDestroy(Player *player){
+    terminaldestroy(&player->terminal);
+    rDestroy(&player->renderer);
+    decoderDestroy(&player->decoder);
+    fetcherDestroy(&player->fetcher);
+}
 
 
