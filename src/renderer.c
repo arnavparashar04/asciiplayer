@@ -20,8 +20,8 @@ int rendererinit(Renderer *renderer, int frameWidth, int frameHeight){
    renderer->charMapLen = strlen(renderer->charMap);
    renderer->swscontxt = NULL;
    renderer->normframe = NULL;
-   int outputWidth = renderer->frameWidth / renderer->charCellWidth;
-   int outputHeight = renderer->frameHeight / renderer->charCellHeight;
+   int outputWidth = renderer->frameWidth + renderer->charCellWidth - 1/ renderer->charCellWidth;
+   int outputHeight = renderer->frameHeight + renderer->charCellHeight - 1 / renderer->charCellHeight;
    renderer->output = malloc(outputHeight * (outputWidth + 1) + 1);
    if (renderer->output == NULL) {
          return -153; //map to output allocation failed
