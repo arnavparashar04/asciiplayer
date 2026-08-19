@@ -12,7 +12,7 @@
 int rendererinit(Renderer *renderer, int frameWidth, int frameHeight){
    renderer->frameWidth = frameWidth;
    renderer->frameHeight = frameHeight;
-   renderer->targetWidth = frameHeight;
+   renderer->targetWidth = frameWidth;
    renderer->targetHeight = frameHeight; //upto v1 frame res = target res
    renderer->charCellWidth = 5;
    renderer->charCellHeight = 10;
@@ -20,8 +20,12 @@ int rendererinit(Renderer *renderer, int frameWidth, int frameHeight){
    renderer->charMapLen = strlen(renderer->charMap);
    renderer->swscontxt = NULL;
    renderer->normframe = NULL;
-   renderer->output = NULL;
-
+   int outputWidth = renderer->frameWidth / renderer->charCellWidth;
+   int outputHeight = renderer->frameHeight / renderer->charCellHeight;
+   renderer->output = malloc(outputHeight * (outputWidth + 1) + 1);
+   if (renderer->output == NULL) {
+         return -153; //map to output allocation failed
+    }
    return 0;
 }
 int normalize(Renderer *renderer, AVFrame *frame){
@@ -46,11 +50,45 @@ int normalize(Renderer *renderer, AVFrame *frame){
 }
 
 char *render(Renderer *renderer, AVFrame *frame){
+    if(normalize(renderer,frame)<0){
+        return NULL;
+    }
+    AVFrame *norm = renderer->normframe;
+    int outputIndex = 0;
+    for(int j = 0; j<renderer->frameHeight; j+=renderer->charCellHeight){
+        for(int i = 0; i<renderer->frameWidth; i+= renderer->charCellWidth){
+            int sum = 0;
+            int endX = i + renderer->charCellWidth;
+            if (endX > renderer->frameWidth){
+                endX = renderer->frameWidth;
+            }    
+            int endY = j + renderer->charCellHeight;
+            if (endY > renderer->frameHeight){
+                  endY = renderer->frameHeight;
+            }      
+            int cellWidth = endX - i;
+            int cellHeight = endY - j;
 
+            for(int n = j; n< endY; n++){
+                for(int m = i; m < endX; m++){
+                    sum += norm->data[0][n * norm->linesize[0] + m]; 
+                }
+            }
+
+            sum = sum/(cellHeight*cellWidth);
+            int index = sum * renderer->charMapLen / 256;
+            renderer->output[outputIndex++] = renderer->charMap[index];
+        }
+        renderer->output[outputIndex++] = '\n';
+    }
+    renderer->output[outputIndex] = '\0';
+    return renderer->output;
 }
 
 void rDestroy(Renderer *renderer){
     av_frame_free(&renderer->normframe);
     sws_freeContext(renderer->swscontxt);
+    renderer->swscontxt = NULL;
     free(renderer->output);
+    renderer->output=NULL;
 }
