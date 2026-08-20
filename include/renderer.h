@@ -3,6 +3,7 @@
 
 #include <libavutil/frame.h>
 #include <libswscale/swscale.h>
+#include <stddef.h>
 
 typedef struct {
     //src res 
@@ -18,6 +19,7 @@ typedef struct {
     const char *charMap;
     int charMapLen;
     char *output;
+    size_t outputSize;
     struct SwsContext *swscontxt;
     AVFrame *normframe;
 } Renderer;

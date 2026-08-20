@@ -25,7 +25,8 @@ int main(int argc, char *argv[]){
         return 0;
     }
     if(args.askVersion){
-        printf("Ascii Video Player Version : 0.9.2\n");
+        printf("Ascii Video Player Version : 1.0.0\n");
+        printf("github.com/arnavparashar04\n");
         return 0;
 
     }

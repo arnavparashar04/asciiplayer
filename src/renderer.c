@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #define ALIGNMENT 32
 
@@ -21,9 +22,10 @@ int rendererinit(Renderer *renderer, int frameWidth, int frameHeight){
    renderer->charMapLen = strlen(renderer->charMap);
    renderer->swscontxt = NULL;
    renderer->normframe = NULL;
-   int outputWidth = renderer->frameWidth + renderer->charCellWidth - 1/ renderer->charCellWidth;
-   int outputHeight = renderer->frameHeight + renderer->charCellHeight - 1 / renderer->charCellHeight;
-   renderer->output = malloc(outputHeight * (outputWidth + 1) + 1);
+   int outputWidth = (renderer->frameWidth + renderer->charCellWidth - 1)/ renderer->charCellWidth;
+   int outputHeight = (renderer->frameHeight + renderer->charCellHeight - 1)/ renderer->charCellHeight;
+   renderer->outputSize = (outputHeight * (outputWidth + 1) + 1)*25;
+   renderer->output = malloc(renderer->outputSize);
    if (renderer->output == NULL) {
          return -153; //map to output allocation failed
     }
@@ -31,7 +33,7 @@ int rendererinit(Renderer *renderer, int frameWidth, int frameHeight){
 }
 int normalize(Renderer *renderer, AVFrame *frame){
     if(renderer->swscontxt == NULL){
-        renderer->swscontxt = sws_getContext(renderer->frameWidth, renderer->frameHeight, frame->format, renderer->frameWidth, renderer->frameHeight, AV_PIX_FMT_GRAY8, SWS_BILINEAR, NULL, NULL, NULL);
+        renderer->swscontxt = sws_getContext(renderer->frameWidth, renderer->frameHeight, frame->format, renderer->frameWidth, renderer->frameHeight, AV_PIX_FMT_RGB24, SWS_BILINEAR, NULL, NULL, NULL);
         if(renderer->swscontxt == NULL){
             return -150; // error map to failed to get context 
         }
@@ -39,7 +41,7 @@ int normalize(Renderer *renderer, AVFrame *frame){
         if(renderer->normframe == NULL){
             return -151; // map to norm frame init failed
         }
-        renderer->normframe->format = AV_PIX_FMT_GRAY8;
+        renderer->normframe->format = AV_PIX_FMT_RGB24;
         renderer->normframe->width = renderer->frameWidth;
         renderer->normframe->height = renderer->frameHeight;
         if(av_frame_get_buffer(renderer->normframe, ALIGNMENT) < 0){
@@ -58,7 +60,7 @@ char *render(Renderer *renderer, AVFrame *frame){
     int outputIndex = 0;
     for(int j = 0; j<renderer->frameHeight; j+=renderer->charCellHeight){
         for(int i = 0; i<renderer->frameWidth; i+= renderer->charCellWidth){
-            int sum = 0;
+            unsigned long long r = 0, g = 0, b = 0;
             int endX = i + renderer->charCellWidth;
             if (endX > renderer->frameWidth){
                 endX = renderer->frameWidth;
@@ -69,19 +71,24 @@ char *render(Renderer *renderer, AVFrame *frame){
             }      
             int cellWidth = endX - i;
             int cellHeight = endY - j;
-
             for(int n = j; n< endY; n++){
                 for(int m = i; m < endX; m++){
-                    sum += norm->data[0][n * norm->linesize[0] + m]; 
+                    uint8_t *pixel = &norm->data[0][n * norm->linesize[0] + m * 3];
+                    r+= pixel[0];
+                    g+= pixel[1];
+                    b+= pixel[2];
                 }
             }
-
-            sum = sum/(cellHeight*cellWidth);
+            r /= cellHeight*cellWidth;
+            g /= cellHeight*cellWidth;
+            b /= cellHeight*cellWidth;
+            int sum = (299 * r + 587 * g + 114 * b) / 1000;
             int index = sum * renderer->charMapLen / 256;
-            renderer->output[outputIndex++] = renderer->charMap[index];
+            outputIndex += snprintf(renderer->output + outputIndex, renderer->outputSize - outputIndex,"\033[38;2;%llu;%llu;%llum%c",r, g, b,renderer->charMap[index]);
         }
         renderer->output[outputIndex++] = '\n';
     }
+    outputIndex += snprintf(renderer->output + outputIndex,renderer->outputSize - outputIndex,"\033[0m");
     renderer->output[outputIndex] = '\0';
     return renderer->output;
 }
