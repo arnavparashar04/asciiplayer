@@ -25,7 +25,7 @@ int main(int argc, char *argv[]){
         return 0;
     }
     if(args.askVersion){
-        printf("Ascii Video Player Version : 0.9.1\n");
+        printf("Ascii Video Player Version : 0.9.2\n");
         return 0;
 
     }

@@ -14,9 +14,10 @@ int rendererinit(Renderer *renderer, int frameWidth, int frameHeight){
    renderer->frameHeight = frameHeight;
    renderer->targetWidth = frameWidth;
    renderer->targetHeight = frameHeight; //upto v1 frame res = target res
-   renderer->charCellWidth = 5;
-   renderer->charCellHeight = 10;
-   renderer->charMap = ".`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
+   renderer->charCellWidth = 3;
+   renderer->charCellHeight = 6;
+   //renderer->charMap = ".`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
+   renderer->charMap = " .,:;irsXA253hMHGS#9B&@";
    renderer->charMapLen = strlen(renderer->charMap);
    renderer->swscontxt = NULL;
    renderer->normframe = NULL;
