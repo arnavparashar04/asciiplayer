@@ -37,7 +37,7 @@ build/asciiplayer
 To install it globally
 
 ```bash
-cmake --install build
+sudo cmake --install build
 ```
 
 Make sure `~/.local/bin` is in your `PATH`.
