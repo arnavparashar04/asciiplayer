@@ -3,6 +3,9 @@
 A terminal video player that renders videos as colored ASCII characters.
 
 This player uses FFmpeg to decode video frames and converts them to characters with 24 bit rgb colours before rendering. Each small region of the frame is represented by a character. The average RGB value of the region determines its terminal color, while its luminance determines which character is chosen from the character ramp. The resulting frame is written directly to the terminal using ANSI truecolor escape sequences.
+## Demo
+
+[ Watch Demo](https://drive.google.com/file/d/1Ou2m59eBLIb6vZpJmNiP8a4XtLCPjGIe/view?usp=sharing)
 
 ## Features
 
