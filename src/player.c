@@ -58,7 +58,6 @@ int playerPlay(Player *player){
        }
 
        while(1){
-           //this loop may need to modified for play/pause operations
            rtrned = avcodec_receive_frame(player->decoder.codecContext,frame);
            if(rtrned == AVERROR(EAGAIN)|| rtrned == AVERROR_EOF || rtrned == AVERROR_EXIT){
                break;
