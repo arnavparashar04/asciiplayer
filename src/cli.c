@@ -20,6 +20,10 @@ cliArgs init_cliargs() {
 
 cliArgs parseArgs(int argn, char **args) {
     cliArgs argS = init_cliargs();
+    if(argn == 1){
+        printf("No arguments given\n");
+        exit(-1);
+    }
     bool flagOptions = false;
         for (int i = 1; i < argn; i++) {
         if (strcmp("--help", args[i]) == 0 || strcmp("-h", args[i]) == 0) {
