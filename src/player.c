@@ -10,12 +10,17 @@
 #include <libavutil/error.h>
 #include <libavutil/frame.h>
 #include <time.h>
+#include <signal.h>
+
+volatile sig_atomic_t running = 1;
 static long long getTimeNs(void){
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
     return (long long)ts.tv_sec * 1000000000LL + ts.tv_nsec;
 }
-
+void handle_sigint(int sig){
+    running = 0;
+}
 int playerinit(Player *player, const char *path){
     int retrned = fetcherInit(&player->fetcher,path);
     AVStream *stream = player->fetcher.frmtcontext->streams[player->fetcher.vStreamIndex];
@@ -40,13 +45,17 @@ int playerinit(Player *player, const char *path){
 int playerPlay(Player *player){
    AVPacket *packet = av_packet_alloc();
    AVFrame *frame = av_frame_alloc();
+    if (signal(SIGINT, handle_sigint) == SIG_ERR) {
+        perror("Error registering SIGINT handler");
+        return EXIT_FAILURE;
+    }
 
    if(packet == NULL || frame == NULL){
        av_packet_free(&packet);
        av_frame_free(&frame);
    }
    long long lastDisplay = getTimeNs();
-   while(fetcherNextPacket(&player->fetcher, packet) >= 0){
+   while(fetcherNextPacket(&player->fetcher, packet) >= 0 && running==1){
        if(packet->stream_index != player->fetcher.vStreamIndex){
            av_packet_unref(packet);
            continue;
@@ -57,7 +66,7 @@ int playerPlay(Player *player){
            return -100; //todo: map in error enum to criticl decoder failure
        }
 
-       while(1){
+       while(running==1){
            rtrned = avcodec_receive_frame(player->decoder.codecContext,frame);
            if(rtrned == AVERROR(EAGAIN)|| rtrned == AVERROR_EOF || rtrned == AVERROR_EXIT){
                break;
@@ -87,6 +96,10 @@ int playerPlay(Player *player){
            terminalRender(player->output);
            lastDisplay = getTimeNs();
        }
+   }
+
+   if(running==0){
+       printf("\033[?25h\033[2J\033[H\033[0m");
    }
     
    av_packet_free(&packet);
